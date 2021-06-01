@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+
+<launch>
+    <arg name="eth0" default="10.42.0.1" />
+    <arg name="wlan0" default="192.168.1.20" />
+    <arg name="veh" />
+    <group ns="$(arg veh)">
+    	<node pkg="bridge" type="bridge.py" name="bridge_joy_to_boat" args="$(arg eth0)" output="screen">
+        	<param name="bridge_type" value="Joy" />
+		<param name="bridge_from" value="joy" />
+		<param name="bridge_to" value="motor/joy" />
+	</node>
+
+    	<node pkg="bridge" type="bridge.py" name="bridge_odom_to_pc" args="$(arg wlan0)" output="screen">
+        	<param name="bridge_type" value="Odometry" />
+        	<param name="bridge_from" value="localization_gps_imu/odometry" />
+		<param name="bridge_to" value="teleop/gps_imu/odometry" />
+    	</node>
+    </group>
+</launch>
